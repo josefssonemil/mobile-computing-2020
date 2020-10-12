@@ -1,26 +1,16 @@
-package com.example.locationbasedcardproximity
+package com.example.cardproximity
 
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.provider.Settings
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-import kotlin.concurrent.schedule
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        btnBottomSheetModal.setOnClickListener {
-            CustomBottomSheetDialogFragment().apply {
-                show(supportFragmentManager, CustomBottomSheetDialogFragment.TAG)
-            }
-        }
 
         var canDraw = true
 

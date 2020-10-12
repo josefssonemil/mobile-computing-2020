@@ -1,26 +1,16 @@
-package com.example.locationbasedcardproximity
+package com.example.cardproximity
 
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.PixelFormat
-import android.media.Image
 import android.os.Build
-import android.os.Build.VERSION_CODES.O
 import android.os.IBinder
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
-import android.widget.*
-import androidx.fragment.app.FragmentManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
-
-
+import android.util.Log
+import android.view.*
+import com.example.cardproximity.CustomLayout
 
 class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
-
 
     private var moving = false
     private var initialTouchY = 0.0f
@@ -29,43 +19,16 @@ class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
     private var initialX = 0
     private lateinit var params: WindowManager.LayoutParams
     private lateinit var windowManager: WindowManager
-    private lateinit var overlayButton: ImageButton
-    private lateinit var modalDialog: BottomSheetDialog
-    private lateinit var layout: LinearLayout
+    private lateinit var dialog: CustomLayout
 
-    private lateinit var fragmentManager: FragmentManager
 
     override fun onCreate() {
         super.onCreate()
-
-        Toast.makeText(this, "Service Created", Toast.LENGTH_SHORT).show()
+        Log.i("overlay", "overlay service started")
 
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
-//        overlayButton = ImageButton(this)
-//        overlayButton.setImageResource(R.drawable.test)
-
-//        overlayButton.setOnTouchListener(this)
-//        overlayButton.setOnClickListener(this)
-
-        layout = LinearLayout(this)
-        layout.setBackgroundColor(Color.WHITE)
-
-        val testText = TextView(this)
-        testText.textSize = 20f
-        testText.text = "Testing"
-        testText.width = 1080
-
-        val testImage = ImageView(this)
-        testImage.setImageResource(R.drawable.ic_launcher_foreground)
-
-        val testButton = Button(this)
-        testButton.text = "Test me"
-
-        layout.addView(testText)
-        layout.addView(testButton)
-        layout.addView(testImage)
-
+        dialog = CustomLayout(this, null)
 
         val layoutFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -84,21 +47,24 @@ class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
         params.gravity = Gravity.TOP or Gravity.START
 
         params.x = 0
-        params.y = 2160
+        params.y = 3000
 
-        windowManager.addView(layout, params)
+        windowManager.addView(dialog, params)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        windowManager.removeView(layout)
+        Log.i("overlay", "overlay service destroyed")
+        windowManager.removeView(dialog)
     }
 
     override fun onBind(p0: Intent?): IBinder? {
+        Log.i("overlay", "overlay onBind")
         return null
     }
 
     override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+        Log.i("overlay", "overlay onTouch")
         view!!.performClick()
 
 //        when (event!!.action) {
@@ -122,6 +88,6 @@ class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
     }
 
     override fun onClick(p0: View?) {
-        if (!moving) Toast.makeText(this, "Button touched", Toast.LENGTH_SHORT).show()
+        Log.i("overlay", "overlay onClick")
     }
 }
