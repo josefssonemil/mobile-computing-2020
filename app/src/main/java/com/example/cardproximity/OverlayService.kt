@@ -14,10 +14,10 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import org.w3c.dom.Text
+
+
 
 class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
 
@@ -91,7 +91,7 @@ class OverlayService : Service(), View.OnTouchListener, View.OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        windowManager.removeView(overlayButton)
+        windowManager.removeView(layout)
     }
 
     override fun onBind(p0: Intent?): IBinder? {
