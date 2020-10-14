@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Card Proximity</string>
     <string name="request_payment_requested">Payment Requested</string>
-    <string name="cancel_text">Cancel</string>
+    <string name="cancel_text">CANCEL</string>
     <string name="request_checking_proximity">Checking proximity…</string>
     <string name="request_listening">Listening…</string>
-    <string name="request_failed">Payment failed</string>
-    <string name="request_success">Payment complete</string>
-    <string name="status_id_text">From: device</string>
+    <string name="request_declined">Payment Declined</string>
+    <string name="request_approved">Payment Approved</string>
+    <string name="status_id_text">Visa Debit Card</string>
 </resources>

@@ -5,9 +5,13 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
+import android.widget.Button
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.custom_dialog_view_layout.*
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,15 +32,15 @@ class MainActivity : AppCompatActivity() {
         val service = Intent(this, OverlayService::class.java)
         startService(service)
 
-        start_service.setOnClickListener {
-            val service = Intent(this, OverlayService::class.java)
-            startService(service)
-        }
+//        start_service.setOnClickListener {
+//            val service = Intent(this, OverlayService::class.java)
+//            startService(service)
+//        }
 
-        stop_service.setOnClickListener {
-            val service = Intent(this, OverlayService::class.java)
-            stopService(service)
-        }
+//        stop_service.setOnClickListener {
+//            val service = Intent(this, OverlayService::class.java)
+//            stopService(service)
+//        }
     }
 
 }
