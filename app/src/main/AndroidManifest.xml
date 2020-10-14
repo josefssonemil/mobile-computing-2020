@@ -23,5 +23,6 @@
             android:name=".OverlayService"
             android:exported="false" />
     </application>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
 </manifest>
