@@ -14,7 +14,7 @@
         android:layout_height="36dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="@string/request_text"
+        android:text="@string/request_payment_requested"
         android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBottom_toTopOf="@+id/info_text"
         tools:layout_editor_absoluteX="0dp" />
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:text="@string/proximity_text"
+        android:text="@string/request_checking_proximity"
         android:textColor="@color/design_default_color_on_primary"
         app:layout_constraintBottom_toTopOf="@+id/cancel_button"
         tools:layout_editor_absoluteX="0dp" />
