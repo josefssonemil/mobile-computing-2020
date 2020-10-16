@@ -12,7 +12,7 @@ class AbortedLayout(context: Context, attrs: AttributeSet?) : LinearLayout(conte
 
     init {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.custom_dialog_view_layout, this, true)
+        val view = inflater.inflate(R.layout.aborted_layour, this, true)
         titleText = view.findViewById(R.id.title_text)
     }
 }

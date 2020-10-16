@@ -9,18 +9,61 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/get_position_button"
+        android:layout_width="283dp"
+        android:layout_height="36dp"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/proxima_nova_regular"
+        android:gravity="center"
+        android:text="GET POSITION"
+        android:textColor="@color/colorAccentFont"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.582" />
+
+    <Button
         android:id="@+id/start_service"
         android:layout_width="283dp"
         android:layout_height="36dp"
         android:background="@color/colorAccent"
         android:fontFamily="@font/proxima_nova_regular"
         android:gravity="center"
-        android:text="START SERVICE"
+        android:text="START OVERLAY SERVICE"
         android:textColor="@color/colorAccentFont"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLatitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Latitude: -"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/tvLongitude"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvLongitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Longitude: -"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/start_service" />
+
+    <TextView
+        android:id="@+id/tvProvider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Provider: -"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/tvLatitude" />
 
 
     <!--    <androidx.appcompat.widget.AppCompatButton-->

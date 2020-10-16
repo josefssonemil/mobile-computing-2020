@@ -12,14 +12,14 @@
         android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="188dp"
         android:fontFamily="@font/inter_regular"
         android:gravity="center"
         android:text="@string/request_declined"
         android:textColor="@color/colorPrimaryFont"
         android:textSize="@dimen/font_size_16"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="-16dp" />
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
