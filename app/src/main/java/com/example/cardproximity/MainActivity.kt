@@ -21,12 +21,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var locationService: LocationService
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
 
         get_position_button.setOnClickListener {
             val intent = Intent(this, LocationService::class.java)
@@ -34,13 +34,20 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        Log.i("main", "running location service")
+        locationService = LocationService()
+        fusedLocationProviderClient = FusedLocationProviderClient(this)
+
         // Overlay Service starts here
         var canDraw = true
 
         var intent: Intent? = null
 
-        intent = Intent(this, LocationService::class.java)
-        startActivity(intent)
+
+//        intent = Intent(this, LocationService::class.java)
+//        startActivity(intent)
+
+//        getLastLocation()
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -55,10 +62,10 @@ class MainActivity : AppCompatActivity() {
         var service = Intent(this, OverlayService::class.java)
         startService(service)
 
-        start_service.setOnClickListener {
-            service = Intent(this, OverlayService::class.java)
-            startService(service)
-        }
+//        start_service.setOnClickListener {
+//            service = Intent(this, OverlayService::class.java)
+//            startService(service)
+//        }
 
 //        stop_service.setOnClickListener {
 //            val service = Intent(this, OverlayService::class.java)

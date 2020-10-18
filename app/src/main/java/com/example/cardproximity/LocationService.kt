@@ -2,39 +2,40 @@ package com.example.cardproximity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Service
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationManager
-import android.os.Bundle
+import android.os.IBinder
 import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
 
-class LocationService : AppCompatActivity() {
+class LocationService : Service() {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     lateinit var locationRequest: LocationRequest
     private val PERMISSION_ID = 1010
+    private lateinit var mainActivity: MainActivity
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreate() {
+        super.onCreate()
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
-        requestPermission()
+
+//        requestPermission()
         getLastLocation()
-
     }
 
     // location service starts here
     fun getLastLocation() {
+        Log.i("location", "getLastLocation()")
         if (checkPermission()) {
-            if (isLocationEnabled()) {
+
+            if (true) {
+
                 fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
                     val location: Location? = task.result
                     if (location == null) {
@@ -47,16 +48,17 @@ class LocationService : AppCompatActivity() {
                     }
                 }
             } else {
-                Toast.makeText(this, "Device location is turned off", Toast.LENGTH_SHORT).show()
+                Log.i("location", "location is turned off")
             }
-        } else {
-            requestPermission()
-        }
 
+        } else {
+//            requestPermission()
+        }
     }
 
     @SuppressLint("MissingPermission")
-    private fun getNewLocation() {
+    fun getNewLocation() {
+        Log.i("location", "getNewLocation()")
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
@@ -79,23 +81,27 @@ class LocationService : AppCompatActivity() {
         }
     }
 
-    private fun checkPermission(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
+    fun checkPermission(): Boolean {
+        Log.i("location", "checkPermission()")
+
+        if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
+            Log.i("location", "checkSelfPermission() == true")
             return true
         }
+        Log.i("location", "checkSelfPermission() == false")
         return false
     }
 
-    private fun requestPermission() {
+    fun requestPermission() {
         ActivityCompat.requestPermissions(
-            this,
+            mainActivity,
             arrayOf(
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -104,14 +110,14 @@ class LocationService : AppCompatActivity() {
         )
     }
 
-    private fun isLocationEnabled(): Boolean {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
+//    fun isLocationEnabled(): Boolean {
+//        val locationManager = getSystemService(mainActivity.applicationContext.LOCATION_SERVICE) as LocationManager
+//        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+//            LocationManager.NETWORK_PROVIDER
+//        )
+//    }
 
-    override fun onRequestPermissionsResult(
+    fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -120,6 +126,10 @@ class LocationService : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 Log.i("position", "permission is granted")
         }
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        TODO("Not yet implemented")
     }
 }
 
