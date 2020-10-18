@@ -25,6 +25,8 @@ public class SoundAnalyzer {
             System.out.println(recorder.getMetrics());
         }
 
+        System.out.println(recorder.getMetrics());
+
     }
 
 
