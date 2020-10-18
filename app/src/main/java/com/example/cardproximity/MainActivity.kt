@@ -30,11 +30,7 @@ class MainActivity : AppCompatActivity() {
 
        var soundHandler : SoundHandler = SoundHandler(this)
 
-
-        // Should play after proximity thing
-
-        soundHandler.startPlay()
-        soundHandler.startListening()
+        soundHandler.start()
 
         get_position_button.setOnClickListener {
             val intent = Intent(this, LocationService::class.java)

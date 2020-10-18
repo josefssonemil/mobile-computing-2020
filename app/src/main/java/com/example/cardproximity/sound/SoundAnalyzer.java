@@ -3,30 +3,74 @@ package com.example.cardproximity.sound;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.os.Build;
+
+import com.example.cardproximity.sound.utils.Complex;
+import com.example.cardproximity.sound.utils.Constants;
+import com.example.cardproximity.sound.utils.FFT;
 
 public class SoundAnalyzer {
 
-    final int buffersize = Constants.numSamples;
+    final int buffersize = 1024;
+    short[] buffer = new short[buffersize];
+
 
     AudioRecord recorder;
 
     public SoundAnalyzer(){
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                11025, AudioFormat.CHANNEL_CONFIGURATION_MONO,
+                8000, AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, buffersize);
     }
 
-    public void startListening(byte[] generatedSnd){
+    public void startListening(){
         recorder.startRecording();
-        recorder.read(generatedSnd,0,generatedSnd.length);
-        System.out.println("listen started");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            System.out.println(recorder.getMetrics());
+
+        while (true){
+            int bufferReadResult = recorder.read(buffer, 0, buffersize); // record data from mic into buffer
+            if (bufferReadResult > 0) {
+                double result = parseInput();
+                System.out.println("Result: " + result);
+            }
         }
 
-        System.out.println(recorder.getMetrics());
 
+
+    }
+
+
+
+    private double parseInput () {
+        double[] magnitude = new double[buffersize / 2];
+
+        //Create Complex array for use in FFT
+        Complex[] fftTempArray = new Complex[buffersize];
+        for (int i = 0; i < buffersize; i++) {
+            fftTempArray[i] = new Complex(buffer[i], 0);
+        }
+
+        //Obtain array of FFT data
+        final Complex[] fftArray = FFT.fft(fftTempArray);
+        // calculate power spectrum (magnitude) values from fft[]
+        for (int i = 0; i < (buffersize / 2) - 1; ++i) {
+
+            double real = fftArray[i].re();
+            double imaginary = fftArray[i].im();
+            magnitude[i] = Math.sqrt(real * real + imaginary * imaginary);
+
+        }
+
+        // find largest peak in power spectrum
+        double max_magnitude = magnitude[0];
+        int max_index = 0;
+        for (int i = 0; i < magnitude.length; ++i) {
+            if (magnitude[i] > max_magnitude) {
+                max_magnitude = (int) magnitude[i];
+                max_index = i;
+            }
+        }
+        double freq = 44100 * max_index / buffersize;//here will get frequency in hz like(17000,18000..etc)
+
+        return freq;
     }
 
 
