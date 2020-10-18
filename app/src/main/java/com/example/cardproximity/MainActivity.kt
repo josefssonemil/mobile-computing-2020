@@ -16,6 +16,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
+import com.example.cardproximity.sound.SoundHandler
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -28,6 +29,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
+
+       var soundHandler : SoundHandler = SoundHandler(this)
+
+        soundHandler.start()
+        
         get_position_button.setOnClickListener {
             val intent = Intent(this, LocationService::class.java)
             startActivity(intent)
@@ -66,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 //            service = Intent(this, OverlayService::class.java)
 //            startService(service)
 //        }
+
 
 //        stop_service.setOnClickListener {
 //            val service = Intent(this, OverlayService::class.java)
