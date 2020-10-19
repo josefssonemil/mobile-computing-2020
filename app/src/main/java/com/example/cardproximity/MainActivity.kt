@@ -16,7 +16,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.location.LocationManagerCompat.isLocationEnabled
+import androidx.lifecycle.ViewModelProvider
 import com.example.cardproximity.sound.SoundHandler
+import com.example.cardproximity.viewModels.PaymentViewModel
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,13 +27,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var locationService: LocationService
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private lateinit var viewModel: PaymentViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        viewModel = ViewModelProvider(this).get(PaymentViewModel::class.java)
 
 
-       var soundHandler : SoundHandler = SoundHandler(this)
+
+
+
+        val soundHandler : SoundHandler = SoundHandler(this)
 
         soundHandler.start()
         
