@@ -36,5 +36,9 @@ class MainActivity : AppCompatActivity() {
         var service = Intent(this, OverlayService::class.java)
         startService(service)
 
+        // To simulate app starting minimized
+        var i: Intent = Intent(Intent.ACTION_MAIN)
+        i.addCategory(Intent.CATEGORY_HOME)
+        startActivity(i)
     }
 }
