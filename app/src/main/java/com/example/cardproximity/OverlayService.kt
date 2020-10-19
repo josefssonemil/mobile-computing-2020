@@ -1,22 +1,22 @@
 package com.example.cardproximity
 
-import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PixelFormat
-import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.View
+import android.view.WindowManager
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
+import com.example.cardproximity.sound.SoundHandler
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.custom_dialog_view_layout.view.*
-import java.util.jar.Manifest
 
 class OverlayService : Service(), View.OnClickListener {
 
@@ -24,6 +24,9 @@ class OverlayService : Service(), View.OnClickListener {
     private lateinit var windowManager: WindowManager
 
     private lateinit var dialog: CustomLayout
+
+
+    private lateinit var soundHandler : SoundHandler
 
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -39,6 +42,8 @@ class OverlayService : Service(), View.OnClickListener {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         dialog = CustomLayout(this, null)
+
+        soundHandler = SoundHandler()
 
 
         dialog.cancel_button.setOnClickListener(this)
@@ -107,6 +112,15 @@ class OverlayService : Service(), View.OnClickListener {
 
     private fun checkPermission(): Boolean {
         Log.i("overlay", "checking location permissions")
+
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.RECORD_AUDIO
+            )
+            != PackageManager.PERMISSION_GRANTED
+        )
+
 
         if (ContextCompat.checkSelfPermission(
                 this,

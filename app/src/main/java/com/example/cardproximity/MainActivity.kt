@@ -1,12 +1,14 @@
 package com.example.cardproximity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
-
-import com.example.cardproximity.sound.SoundHandler
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,10 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        var soundHandler: SoundHandler = SoundHandler(this)
-
-        soundHandler.start()
 
         // Overlay Service starts here
         var canDraw = true
@@ -31,6 +29,18 @@ class MainActivity : AppCompatActivity() {
             if (!canDraw && intent != null) {
                 startActivity(intent)
             }
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.RECORD_AUDIO),
+                1234
+            )
         }
 
         var service = Intent(this, OverlayService::class.java)

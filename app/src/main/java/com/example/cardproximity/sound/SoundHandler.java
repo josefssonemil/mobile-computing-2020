@@ -11,8 +11,7 @@ import com.example.cardproximity.sound.utils.Constants;
 
 public class SoundHandler {
 
-    private AppCompatActivity activity;
-    private boolean hasPermission;
+
 
     private SoundGenerator soundGenerator;
 
@@ -31,10 +30,8 @@ public class SoundHandler {
     // Emulator  Device ID:RSR1.200819.001.A1
 
 
-    public SoundHandler(AppCompatActivity activity) {
-        this.activity = activity;
+    public SoundHandler() {
 
-        checkPermission();
 
         checkID(android.os.Build.ID);
 
@@ -62,27 +59,6 @@ public class SoundHandler {
 
 
 
-
-    private void checkPermission () {
-        if (ContextCompat.checkSelfPermission(activity,
-                Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.RECORD_AUDIO},
-                    1234);
-            hasPermission = true;
-            System.out.println(hasPermission);
-        }
-        else {
-            System.out.println(hasPermission);
-
-            hasPermission = false;
-        }
-    }
-
-    public boolean hasPermssion (){
-        return hasPermission;
-    }
 
 
     public void start () {
