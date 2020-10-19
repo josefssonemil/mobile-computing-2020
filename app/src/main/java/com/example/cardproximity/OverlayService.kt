@@ -24,8 +24,7 @@ class OverlayService : Service(), View.OnClickListener {
     private lateinit var windowManager: WindowManager
 
     private lateinit var dialog: CustomLayout
-    private lateinit var approvedDialog: ApprovedLayout
-    private lateinit var abortedLayout: AbortedLayout
+
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -40,8 +39,7 @@ class OverlayService : Service(), View.OnClickListener {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         dialog = CustomLayout(this, null)
-        approvedDialog = ApprovedLayout(this, null)
-        abortedLayout = AbortedLayout(this, null)
+
 
         dialog.cancel_button.setOnClickListener(this)
 
