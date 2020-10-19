@@ -73,11 +73,11 @@ class OverlayService : Service(), View.OnClickListener {
 
     }
 
-    private fun initiateSound(){
+    private fun initiateSound() {
         soundHandler.start()
     }
 
-    private fun checkSound () : Boolean{
+    private fun checkSound(): Boolean {
         return soundHandler.checkStatus()
     }
 
@@ -107,14 +107,13 @@ class OverlayService : Service(), View.OnClickListener {
                             dialog.info_text.text = "Sound initiated"
                             Log.i("overlay", "sound initiated")
 
-                            if (checkSound()){
+                            if (checkSound()) {
                                 dialog.info_text.text = "Payment complete"
                                 Log.i("overlay", "check sound true!!!")
 
 
                                 // Payment complete
-                            }
-                            else {
+                            } else {
                                 Log.i("overlay", "check sound false!!!")
 
                             }
@@ -149,10 +148,12 @@ class OverlayService : Service(), View.OnClickListener {
         if (ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.RECORD_AUDIO
             )
@@ -179,8 +180,8 @@ class OverlayService : Service(), View.OnClickListener {
         var HomeLat = 57.705476
         var HomeLon = 12.026175
 
-        var zeroLat = tempoLat
-        var zeroLong = tempoLon
+        var zeroLat = HomeLat
+        var zeroLong = HomeLon
         var earthRadius = 6378.137
 
         var dLat = latitude * Math.PI / 180 - zeroLat * Math.PI / 180
@@ -194,7 +195,7 @@ class OverlayService : Service(), View.OnClickListener {
 
         Log.i("overlay", "location in meters: " + Math.round(distanceInMeters))
 
-            if (distanceInMeters <= boundary) {
+        if (distanceInMeters <= boundary) {
             Log.i("overlay", "in proximity")
             return true
         } else {
