@@ -37,7 +37,7 @@ class OverlayService : Service(), View.OnClickListener {
     override fun onCreate() {
         super.onCreate()
 
-        Log.i("overlay", Build.ID)
+        Log.i("overlay", "***BUILD ID*** "+Build.ID)
 
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
