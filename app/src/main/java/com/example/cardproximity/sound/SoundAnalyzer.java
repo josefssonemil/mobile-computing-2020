@@ -10,11 +10,13 @@ import com.example.cardproximity.sound.utils.FFT;
 
 public class SoundAnalyzer {
 
-    final int buffersize = 1024;
-    short[] buffer = new short[buffersize];
+    private final int buffersize = 1024;
+    private short[] buffer = new short[buffersize];
 
 
     AudioRecord recorder;
+
+    private double result;
 
     public SoundAnalyzer(){
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
@@ -25,18 +27,18 @@ public class SoundAnalyzer {
     public void startListening(){
         recorder.startRecording();
 
-        while (true){
             int bufferReadResult = recorder.read(buffer, 0, buffersize); // record data from mic into buffer
             if (bufferReadResult > 0) {
                 double result = parseInput();
+                this.result = result;
                 System.out.println("Result: " + result);
-            }
+
         }
-
-
-
     }
 
+    public void stopListening(){
+        recorder.stop();
+    }
 
 
     private double parseInput () {
@@ -71,6 +73,10 @@ public class SoundAnalyzer {
         double freq = 44100 * max_index / buffersize;//here will get frequency in hz like(17000,18000..etc)
 
         return freq;
+    }
+
+    public double getresult() {
+        return this.result;
     }
 
 

@@ -72,6 +72,14 @@ class OverlayService : Service(), View.OnClickListener {
 
     }
 
+    private fun initiateSound(){
+        soundHandler.start()
+    }
+
+    private fun checkSound () : Boolean{
+        return soundHandler.checkStatus()
+    }
+
     private fun checkProximity() {
         val request = LocationRequest()
         // Intervals if continious updating needed
@@ -88,7 +96,19 @@ class OverlayService : Service(), View.OnClickListener {
                         longitude = locationResult.lastLocation.longitude
                         if (isInProximity(latitude, longitude)) {
                             dialog.info_text.text = "Location proximity accepted"
-                            Log.i("overlay", "location in proximity")
+                            initiateSound()
+                            dialog.info_text.text = "Sound initiated"
+
+                            if (checkSound()){
+                                dialog.info_text.text = "Payment complete"
+
+
+                                // Payment complete
+                            }
+
+
+
+                            Log.i("overlay", "location in proximity && sound initiating")
                         } else {
                             dialog.info_text.text = "Location proximity rejected"
                             dialog.title_text.text = "Payment Rejected"
