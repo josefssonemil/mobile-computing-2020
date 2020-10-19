@@ -36,14 +36,11 @@ public class SoundHandler {
         checkID(android.os.Build.ID);
 
 
-        if(current == Type.SENDER){
             soundGenerator = new SoundGenerator();
 
-        }
 
-        else if (current == Type.RECEIVER){
             soundAnalyzer = new SoundAnalyzer();
-        }
+
     }
 
 
@@ -52,9 +49,13 @@ public class SoundHandler {
             current = Type.SENDER;
         }
 
-        else if (ID.equals(Constants.RECEIVER)){
+        else {
             current = Type.RECEIVER;
         }
+
+        /*else if (ID.equals(Constants.RECEIVER)){
+            current = Type.RECEIVER;
+        }*/
     }
 
 
@@ -90,14 +91,53 @@ public class SoundHandler {
     }
 
     public boolean checkStatus() {
-        if (soundAnalyzer.getresult() == soundGenerator.getFrequency()){
-            stop();
-            return true;
 
+
+        if (current == Type.RECEIVER) {
+            if (soundGenerator.getFrequency() == soundAnalyzer.getResult()) {
+                return true;
+            }
+            else {
+                return false;
+
+            }
         }
-        else {
+
+        else if (current == Type.SENDER) {
             return false;
         }
+
+
+        return false;
+
+        // Debug
+      /* if (current == Type.SENDER) {
+           if (soundGenerator.getFrequency() == soundGenerator.getFrequency()){
+               System.out.println("success! frequencies matches");
+
+               return true;
+           }
+           else {
+               System.out.println("failure! frequencies does not match");
+
+               return false;
+           }
+       }
+
+       return false;*/
+
+       /*
+       if (soundGenerator.getFrequency() == soundAnalyzer.getResult()) {
+           System.out.println("success! frequencies matches");
+           return true;
+       }
+
+       else {
+           System.out.println("failure! frequencies does not match");
+
+           return false;
+       }*/
+
     }
 
 

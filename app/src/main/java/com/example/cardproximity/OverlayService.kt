@@ -100,14 +100,22 @@ class OverlayService : Service(), View.OnClickListener {
 
                         if (isInProximity(latitude, longitude)) {
                             dialog.info_text.text = "Location proximity accepted"
+                            Log.i("overlay", "location proximity accepted")
+
                             initiateSound()
                             dialog.info_text.text = "Sound initiated"
+                            Log.i("overlay", "sound initiated")
 
                             if (checkSound()){
                                 dialog.info_text.text = "Payment complete"
+                                Log.i("overlay", "check sound true!!!")
 
 
                                 // Payment complete
+                            }
+                            else {
+                                Log.i("overlay", "check sound false!!!")
+
                             }
 
 
@@ -158,10 +166,10 @@ class OverlayService : Service(), View.OnClickListener {
 
     /* Calculates coordinates distance in meters and returns true or false depending on a set difference in meters*/
     fun isInProximity(latitude: Double, longitude: Double): Boolean {
-        var boundary = 3
+        var boundary = 9000000
 
-        var tempoLat = 57.706243
-        var tempoLon = 12.024906
+        var tempoLat = 37.4217484
+        var tempoLon = -122.0838814
 
         var StreetLat = 57.705430
         var StreetLon = 12.025805
@@ -169,8 +177,8 @@ class OverlayService : Service(), View.OnClickListener {
         var HomeLat = 57.705441
         var HomeLon = 12.026147
 
-        var zeroLat = HomeLat
-        var zeroLong = HomeLon
+        var zeroLat = tempoLat
+        var zeroLong = tempoLon
         var earthRadius = 6378.137
 
         var dLat = latitude * Math.PI / 180 - zeroLat * Math.PI / 180

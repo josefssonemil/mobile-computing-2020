@@ -75,7 +75,7 @@ public class SoundAnalyzer {
         return freq;
     }
 
-    public double getresult() {
+    public double getResult() {
         return this.result;
     }
 
