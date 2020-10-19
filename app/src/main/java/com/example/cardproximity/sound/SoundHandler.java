@@ -1,75 +1,44 @@
 package com.example.cardproximity.sound;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.example.cardproximity.sound.utils.Constants;
 
+// Samsung   Device ID:PPR1.180610.011
+// Emulator  Device ID:RSR1.200819.001.A1
+
 public class SoundHandler {
-
-
-
     private SoundGenerator soundGenerator;
-
     private SoundAnalyzer soundAnalyzer;
+    private Type current;
+    private Boolean soundRunning;
 
     enum Type {
         SENDER,
         RECEIVER
     }
 
-
-    private Type current;
-
-    // Samsung   Device ID:PPR1.180610.011
-
-    // Emulator  Device ID:RSR1.200819.001.A1
-
-
     public SoundHandler() {
-
-
         checkID(android.os.Build.ID);
-
-
-            soundGenerator = new SoundGenerator();
-
-
-            soundAnalyzer = new SoundAnalyzer();
-
+        soundGenerator = new SoundGenerator();
+        soundAnalyzer = new SoundAnalyzer();
+        soundRunning = false;
     }
 
-
     private void checkID(String ID) {
-        if (ID.equals(Constants.SENDER)){
+        if (ID.equals(Constants.SENDER)) {
             current = Type.SENDER;
-        }
-
-        else {
+        } else {
             current = Type.RECEIVER;
         }
-
         /*else if (ID.equals(Constants.RECEIVER)){
             current = Type.RECEIVER;
         }*/
     }
 
-
-
-
-
-    public void start () throws InterruptedException {
-        if (current == Type.SENDER){
+    public void start() throws InterruptedException {
+        if (current == Type.SENDER && !soundRunning) {
             soundGenerator.play();
-        }
-
-        else if (current == Type.RECEIVER){
-
-
+            soundRunning = true;
+        } else if (current == Type.RECEIVER) {
             // wait a little bit before listening
             Thread.sleep(500);
             soundAnalyzer.startListening();
@@ -77,35 +46,25 @@ public class SoundHandler {
         }
     }
 
-    public void stop(){
-        if (current == Type.SENDER){
+    public void stop() {
+        if (current == Type.SENDER && soundRunning) {
             soundGenerator.stop();
-        }
-
-        else if (current == Type.RECEIVER){
-
+            soundRunning = false;
+        } else if (current == Type.RECEIVER) {
             soundAnalyzer.stopListening();
-
         }
     }
 
     public boolean checkStatus() {
-
-
         if (current == Type.RECEIVER) {
-            if (soundGenerator.getFrequency() == soundAnalyzer.getResult()) {
+            if (2196 == soundAnalyzer.getResult()) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
-
             }
-        }
-
-        else if (current == Type.SENDER) {
+        } else if (current == Type.SENDER) {
             return false;
         }
-
 
         return false;
 
@@ -138,9 +97,4 @@ public class SoundHandler {
        }*/
 
     }
-
-
-
-
-
 }

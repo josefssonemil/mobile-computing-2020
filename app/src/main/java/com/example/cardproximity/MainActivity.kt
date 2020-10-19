@@ -75,22 +75,20 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        var service = Intent(this, OverlayService::class.java)
+        val service = Intent(this, OverlayService::class.java)
         startService(service)
 
         // To simulate app starting minimized (comment out if to debug)
-//        var i: Intent = Intent(Intent.ACTION_MAIN)
-//        i.addCategory(Intent.CATEGORY_HOME)
-//        startActivity(i)
+        val i: Intent = Intent(Intent.ACTION_MAIN)
+        i.addCategory(Intent.CATEGORY_HOME)
+        startActivity(i)
     }
 
-    fun triggerRestart(context: Activity) {
+    private fun triggerRestart(context: Activity) {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(intent)
-        if (context is Activity) {
-            (context as Activity).finish()
-        }
+        finish()
         Runtime.getRuntime().exit(0)
     }
 }

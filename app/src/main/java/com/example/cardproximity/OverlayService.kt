@@ -11,8 +11,6 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import com.example.cardproximity.sound.SoundHandler
 import com.google.android.gms.location.*
@@ -21,15 +19,16 @@ import kotlin.system.exitProcess
 
 class OverlayService : Service(), View.OnClickListener {
 
+    // Fixed coordinates for proof of concept
+    private var cardLocationLat: Double = 57.705476
+    private var cardLocationLon: Double = 12.026175
+    private var phoneLocationLat: Double = 57.705476
+    private var phoneLocationLon: Double = 12.026175
+
     private lateinit var params: WindowManager.LayoutParams
     private lateinit var windowManager: WindowManager
-
     private lateinit var dialog: CustomLayout
-
-
     private lateinit var soundHandler: SoundHandler
-
-
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private var longitude = 0.0
@@ -37,18 +36,16 @@ class OverlayService : Service(), View.OnClickListener {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i("overlay", "overlay service started")
+
+        Log.i("overlay", Build.ID)
 
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
         dialog = CustomLayout(this, null)
-
-        soundHandler = SoundHandler()
-
-
         dialog.cancel_button.setOnClickListener(this)
 
+        soundHandler = SoundHandler()
 
         val layoutFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -66,11 +63,9 @@ class OverlayService : Service(), View.OnClickListener {
 
         params.gravity = Gravity.BOTTOM or Gravity.END
 
-        Log.i("overlay", "view added")
         windowManager.addView(dialog, params)
 
         checkProximity()
-
     }
 
     private fun initiateSound() {
@@ -81,72 +76,57 @@ class OverlayService : Service(), View.OnClickListener {
         return soundHandler.checkStatus()
     }
 
+    private fun stopSound() {
+
+        // wait a little bit before listening
+        Thread.sleep(5000)
+        soundHandler.stop()
+    }
+
     private fun checkProximity() {
-        Log.i("overlay", "in proximity check")
         val request = LocationRequest()
         // Intervals if continious updating needed
-        request.interval = 10000
-        request.fastestInterval = 5000
+//        request.interval = 10000
+//        request.fastestInterval = 5000
         request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         if (checkPermission()) {
-            Log.i("overlay", "checkPermission() true")
             fusedLocationProviderClient.requestLocationUpdates(
                 request,
                 object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {
-                        Log.i("overlay", "location callback started")
                         latitude = locationResult.lastLocation.latitude
                         longitude = locationResult.lastLocation.longitude
 
-                        if (isInProximity(latitude, longitude)) {
-                            dialog.info_text.text = "Location proximity accepted"
-                            Log.i("overlay", "BEFORE SLEEP")
-
-
-                            initiateSound()
-
-                            Log.i("overlay", "AFTER SLEEP")
+                        if (isInProximity(phoneLocationLat, phoneLocationLon)) {
+                            Log.i("overlay", "LOCATION PROXIMITY ACCEPTED")
 
                             Log.i("overlay", "sound initiated")
+                            initiateSound()
 
                             if (checkSound()) {
-                                dialog.info_text.text = "Payment complete"
-                                Log.i("overlay", "check sound true!!!")
-
+                                setAcceptedData()
+                                stopSound()
+                                Log.i("overlay", "SOUND PROXIMITY ACCEPTED")
 
                                 // Payment complete
                             } else {
-                                Log.i("overlay", "check sound false!!!")
-
+                                setRejectedData()
+                                stopSound()
+                                Log.i("overlay", "SOUND PROXIMITY REJECTED")
                             }
-
-
-
-                            Log.i("overlay", "location in proximity && sound initiating")
                         } else {
-                            dialog.info_text.text = "Location proximity rejected: Not in proximity"
-                            dialog.title_text.text = "Payment Rejected"
-                            dialog.card_text.text = ""
-                            dialog.progress_circular.visibility = View.GONE
-//                            dialog.cancel_button.visibility = View.GONE
-                            Log.i("overlay", "location rejected")
+                            setRejectedData()
+                            Log.i("overlay", "LOCATION PROXIMITY REJECTED")
                         }
-
-                        Log.i(
-                            "overlay",
-                            "location: " + latitude.toString() + ", " + longitude.toString()
-                        )
                     }
                 },
                 null
             )
         }
-
     }
 
     private fun checkPermission(): Boolean {
-        Log.i("overlay", "checking location permissions")
 
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -162,63 +142,62 @@ class OverlayService : Service(), View.OnClickListener {
             )
             == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.i("overlay", "permission granted")
+            Log.i("overlay", "PERMISSION GRANTED")
             return true
         }
-        Log.i("location", "permission denied")
+        Log.i("location", "PERMISSION DENIED")
         return false
     }
 
     /* Calculates coordinates distance in meters and returns true or false depending on a set difference in meters*/
     fun isInProximity(latitude: Double, longitude: Double): Boolean {
-        var boundary = 20
+        val boundary = 10
+        val earthRadius = 6378.137
 
-
-        var tempoLat = 37.4217484
-        var tempoLon = -122.0838814
-
-        var StreetLat = 57.705430
-        var StreetLon = 12.025805
-
-        var HomeLat = 57.705476
-        var HomeLon = 12.026175
-
-        var zeroLat = HomeLat
-        var zeroLong = HomeLon
-        var earthRadius = 6378.137
-
-        var dLat = latitude * Math.PI / 180 - zeroLat * Math.PI / 180
-        var dLon = longitude * Math.PI / 180 - zeroLong * Math.PI / 180
-        var a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(zeroLat * Math.PI / 180) * Math.cos(
+        val dLat = latitude * Math.PI / 180 - cardLocationLat * Math.PI / 180
+        val dLon = longitude * Math.PI / 180 - cardLocationLon * Math.PI / 180
+        val a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(cardLocationLat * Math.PI / 180) * Math.cos(
                 latitude * Math.PI / 180
             ) * Math.sin(dLon / 2) * Math.sin(dLon / 2)
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-        var distanceInMeters = earthRadius * c * 1000
-
-        Log.i("overlay", "location in meters: " + Math.round(distanceInMeters))
+        val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+        val distanceInMeters = earthRadius * c * 1000
 
         if (distanceInMeters <= boundary) {
-            Log.i("overlay", "in proximity")
+            Log.i("overlay", "in proximity [" + Math.round(distanceInMeters) + "m]")
             return true
         } else {
-            Log.i("overlay", "NOT in proximity")
+            Log.i(
+                "overlay", "NOT in proximity [" + Math.round(distanceInMeters) + "m]"
+            )
             return false
         }
     }
 
+
+    private fun setAcceptedData() {
+        dialog.title_text.text = "Payment Accepted"
+        dialog.info_text.text = "Proximity accepted"
+        dialog.progress_circular.visibility = View.GONE
+        dialog.cancel_button.text = "CLOSE"
+    }
+
+    private fun setRejectedData() {
+        dialog.title_text.text = "Payment Rejected"
+        dialog.info_text.text = "Proximity rejected"
+        dialog.progress_circular.visibility = View.GONE
+        dialog.cancel_button.text = "CLOSE"
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("overlay", "overlay service destroyed")
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        Log.i("overlay", "overlay onBind")
         return null
     }
 
     override fun onClick(p0: View?) {
-        Log.i("overlay", "overlay onClick")
         exitProcess(0)
     }
 }

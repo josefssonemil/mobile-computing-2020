@@ -3,6 +3,7 @@ package com.example.cardproximity.sound;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.util.Log;
 
 import com.example.cardproximity.sound.utils.Complex;
 import com.example.cardproximity.sound.utils.Constants;
@@ -18,30 +19,31 @@ public class SoundAnalyzer {
 
     private double result;
 
-    public SoundAnalyzer(){
+    public SoundAnalyzer() {
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 8000, AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT, buffersize);
     }
 
-    public void startListening(){
+    public void startListening() {
         recorder.startRecording();
 
-            int bufferReadResult = recorder.read(buffer, 0, buffersize); // record data from mic into buffer
-            if (bufferReadResult > 0) {
-                double result = parseInput();
-                this.result = result;
-                System.out.println("Result: " + result);
+        int bufferReadResult = recorder.read(buffer, 0, buffersize); // record data from mic into buffer
+        if (bufferReadResult > 0) {
+            double result = parseInput();
+            this.result = result;
+            System.out.println("Result: " + result);
+            Log.i("overlay", "Result " + result);
 
         }
     }
 
-    public void stopListening(){
+    public void stopListening() {
         recorder.stop();
     }
 
 
-    private double parseInput () {
+    private double parseInput() {
         double[] magnitude = new double[buffersize / 2];
 
         //Create Complex array for use in FFT
