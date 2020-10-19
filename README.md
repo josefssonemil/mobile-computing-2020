@@ -22,7 +22,7 @@ The normal use of the application can be run in both an android emulator and a p
 1. Run the app.
 2. Enable ```Allow display over other apps```
 3. Run the app again.
-2. Allow location permission and audio permission when prompted. If no prompt, go to ```Settings --> Apps & notifications --> Card Proximity``` and enable the permissions manually.\
+2. Allow location permission and audio permission when prompted. If no prompt, go to ```Settings``` &rarr; ``` Apps & notifications ``` &rarr; ``` Card Proximity``` and enable the permissions manually.\
  **IMPORTANT:** Make sure to select ```Allow all the time``` for the location permission.
 3. Run the app again. Et Voilà!
 
