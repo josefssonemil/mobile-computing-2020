@@ -26,7 +26,7 @@ class OverlayService : Service(), View.OnClickListener {
     private lateinit var dialog: CustomLayout
 
 
-    private lateinit var soundHandler : SoundHandler
+    private lateinit var soundHandler: SoundHandler
 
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -112,23 +112,18 @@ class OverlayService : Service(), View.OnClickListener {
 
     private fun checkPermission(): Boolean {
         Log.i("overlay", "checking location permissions")
-
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.RECORD_AUDIO
-            )
-            != PackageManager.PERMISSION_GRANTED
-        )
-
-
+        
         if (ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.RECORD_AUDIO
+            )
+            != PackageManager.PERMISSION_GRANTED
         ) {
             Log.i("overlay", "permission granted")
             return true
