@@ -71,9 +71,10 @@ class OverlayService : Service(), View.OnClickListener {
 
     private fun checkProximity() {
         val request = LocationRequest()
+        // Intervals if continious updating needed
 //        request.interval = 10000
 //        request.fastestInterval = 5000
-//        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         if (checkPermission()) {
             fusedLocationProviderClient.requestLocationUpdates(
@@ -85,10 +86,15 @@ class OverlayService : Service(), View.OnClickListener {
                         if (isInProximity(latitude, longitude)) {
                             dialog.info_text.text = "Location proximity accepted"
                             Log.i("overlay", "location in proximity")
+                        } else {
+                            dialog.info_text.text = "Location proximity rejected"
+                            dialog.title_text.text = "Payment Rejected"
+                            dialog.card_text.text = ""
+                            dialog.progress_circular.visibility = View.GONE
+//                            dialog.cancel_button.visibility = View.GONE
+                            Log.i("overlay", "location rejected")
                         }
 
-
-//                        dialog.info_text.text = latitude.toString() + ", " + longitude.toString()
                         Log.i(
                             "overlay",
                             "location: " + latitude.toString() + ", " + longitude.toString()
@@ -145,14 +151,11 @@ class OverlayService : Service(), View.OnClickListener {
             Log.i("overlay", "NOT in 20m proximity")
             return false
         }
-
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         Log.i("overlay", "overlay service destroyed")
-        //windowManager.removeView(dialog)
     }
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -163,6 +166,5 @@ class OverlayService : Service(), View.OnClickListener {
     override fun onClick(p0: View?) {
         Log.i("overlay", "overlay onClick")
         windowManager.removeView(dialog)
-        windowManager.addView(abortedLayout, params)
     }
 }
