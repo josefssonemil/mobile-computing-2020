@@ -73,19 +73,23 @@ class OverlayService : Service(), View.OnClickListener {
     }
 
     private fun checkProximity() {
+        Log.i("overlay", "in proximity check")
         val request = LocationRequest()
         // Intervals if continious updating needed
-//        request.interval = 10000
-//        request.fastestInterval = 5000
+        request.interval = 10000
+        request.fastestInterval = 5000
         request.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
         if (checkPermission()) {
+            Log.i("overlay", "checkPermission() true")
             fusedLocationProviderClient.requestLocationUpdates(
                 request,
                 object : LocationCallback() {
                     override fun onLocationResult(locationResult: LocationResult) {
+                        Log.i("overlay", "location callback started")
                         latitude = locationResult.lastLocation.latitude
                         longitude = locationResult.lastLocation.longitude
+
                         if (isInProximity(latitude, longitude)) {
                             dialog.info_text.text = "Location proximity accepted"
                             Log.i("overlay", "location in proximity")
@@ -112,18 +116,18 @@ class OverlayService : Service(), View.OnClickListener {
 
     private fun checkPermission(): Boolean {
         Log.i("overlay", "checking location permissions")
-        
+
         if (ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+            ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
                 this,
                 android.Manifest.permission.RECORD_AUDIO
             )
-            != PackageManager.PERMISSION_GRANTED
+            == PackageManager.PERMISSION_GRANTED
         ) {
             Log.i("overlay", "permission granted")
             return true
@@ -134,11 +138,19 @@ class OverlayService : Service(), View.OnClickListener {
 
     /* Calculates coordinates distance in meters and returns true or false depending on a set difference in meters*/
     fun isInProximity(latitude: Double, longitude: Double): Boolean {
+        var boundary = 3
 
-        // Tempo coordinates: 57.706243 12.024906
-        // Street coordinates: 57.705430 12.025805
-        var zeroLat = 57.705430
-        var zeroLong = 12.025805
+        var tempoLat = 57.706243
+        var tempoLon = 12.024906
+
+        var StreetLat = 57.705430
+        var StreetLon = 12.025805
+
+        var HomeLat = 57.705441
+        var HomeLon = 12.026147
+
+        var zeroLat = HomeLat
+        var zeroLong = HomeLon
         var earthRadius = 6378.137
 
         var dLat = latitude * Math.PI / 180 - zeroLat * Math.PI / 180
@@ -152,7 +164,7 @@ class OverlayService : Service(), View.OnClickListener {
 
         Log.i("overlay", "location in meters: " + Math.round(distanceInMeters))
 
-        if (distanceInMeters <= 20.0) {
+            if (distanceInMeters <= boundary) {
             Log.i("overlay", "in 20m proximity")
             return true
         } else {
