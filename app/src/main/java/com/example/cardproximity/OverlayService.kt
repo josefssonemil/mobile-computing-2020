@@ -101,10 +101,13 @@ class OverlayService : Service(), View.OnClickListener {
 
                         if (isInProximity(latitude, longitude)) {
                             dialog.info_text.text = "Location proximity accepted"
-                            Log.i("overlay", "location proximity accepted")
+                            Log.i("overlay", "BEFORE SLEEP")
+
 
                             initiateSound()
-                            dialog.info_text.text = "Sound initiated"
+
+                            Log.i("overlay", "AFTER SLEEP")
+
                             Log.i("overlay", "sound initiated")
 
                             if (checkSound()){
@@ -179,8 +182,8 @@ class OverlayService : Service(), View.OnClickListener {
         var HomeLat = 57.705476
         var HomeLon = 12.026175
 
-        var zeroLat = tempoLat
-        var zeroLong = tempoLon
+        var zeroLat = HomeLat
+        var zeroLong = HomeLon
         var earthRadius = 6378.137
 
         var dLat = latitude * Math.PI / 180 - zeroLat * Math.PI / 180

@@ -62,16 +62,17 @@ public class SoundHandler {
 
 
 
-    public void start () {
+    public void start () throws InterruptedException {
         if (current == Type.SENDER){
             soundGenerator.play();
-            System.out.println("Sender starts play");
         }
 
         else if (current == Type.RECEIVER){
 
+
+            // wait a little bit before listening
+            Thread.sleep(500);
             soundAnalyzer.startListening();
-            System.out.println("Receiver starts listen");
 
         }
     }
@@ -79,13 +80,11 @@ public class SoundHandler {
     public void stop(){
         if (current == Type.SENDER){
             soundGenerator.stop();
-            System.out.println("Sender stops play");
         }
 
         else if (current == Type.RECEIVER){
 
             soundAnalyzer.stopListening();
-            System.out.println("Receiver stops listen");
 
         }
     }
