@@ -1,33 +1,24 @@
 package com.example.cardproximity
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
+
 import androidx.lifecycle.ViewModelProvider
 import com.example.cardproximity.sound.SoundHandler
 import com.example.cardproximity.viewModels.PaymentViewModel
-import com.google.android.gms.location.*
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var locationService: LocationService
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
 
     private lateinit var viewModel: PaymentViewModel
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,31 +31,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val soundHandler : SoundHandler = SoundHandler(this)
+        var soundHandler: SoundHandler = SoundHandler(this)
 
         soundHandler.start()
-        
-        get_position_button.setOnClickListener {
-            val intent = Intent(this, LocationService::class.java)
-            startActivity(intent)
-
-        }
-
-        Log.i("main", "running location service")
-        locationService = LocationService()
-        fusedLocationProviderClient = FusedLocationProviderClient(this)
 
         // Overlay Service starts here
         var canDraw = true
-
         var intent: Intent? = null
-
-
-//        intent = Intent(this, LocationService::class.java)
-//        startActivity(intent)
-
-//        getLastLocation()
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
@@ -74,21 +47,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         var service = Intent(this, OverlayService::class.java)
         startService(service)
-
-//        start_service.setOnClickListener {
-//            service = Intent(this, OverlayService::class.java)
-//            startService(service)
-//        }
-
-
-//        stop_service.setOnClickListener {
-//            val service = Intent(this, OverlayService::class.java)
-//            stopService(service)
-//        }
     }
-
-
 }
