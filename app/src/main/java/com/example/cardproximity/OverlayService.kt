@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import com.example.cardproximity.sound.SoundHandler
 import com.google.android.gms.location.*
 import kotlinx.android.synthetic.main.custom_dialog_view_layout.view.*
+import kotlin.system.exitProcess
 
 class OverlayService : Service(), View.OnClickListener {
 
@@ -94,7 +95,7 @@ class OverlayService : Service(), View.OnClickListener {
                             dialog.info_text.text = "Location proximity accepted"
                             Log.i("overlay", "location in proximity")
                         } else {
-                            dialog.info_text.text = "Location proximity rejected"
+                            dialog.info_text.text = "Location proximity rejected: Not in proximity"
                             dialog.title_text.text = "Payment Rejected"
                             dialog.card_text.text = ""
                             dialog.progress_circular.visibility = View.GONE
@@ -138,7 +139,7 @@ class OverlayService : Service(), View.OnClickListener {
 
     /* Calculates coordinates distance in meters and returns true or false depending on a set difference in meters*/
     fun isInProximity(latitude: Double, longitude: Double): Boolean {
-        var boundary = 3
+        var boundary = 10
 
         var tempoLat = 57.706243
         var tempoLon = 12.024906
@@ -146,8 +147,8 @@ class OverlayService : Service(), View.OnClickListener {
         var StreetLat = 57.705430
         var StreetLon = 12.025805
 
-        var HomeLat = 57.705441
-        var HomeLon = 12.026147
+        var HomeLat = 57.705476
+        var HomeLon = 12.026175
 
         var zeroLat = HomeLat
         var zeroLong = HomeLon
@@ -165,10 +166,10 @@ class OverlayService : Service(), View.OnClickListener {
         Log.i("overlay", "location in meters: " + Math.round(distanceInMeters))
 
             if (distanceInMeters <= boundary) {
-            Log.i("overlay", "in 20m proximity")
+            Log.i("overlay", "in proximity")
             return true
         } else {
-            Log.i("overlay", "NOT in 20m proximity")
+            Log.i("overlay", "NOT in proximity")
             return false
         }
     }
@@ -185,6 +186,6 @@ class OverlayService : Service(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         Log.i("overlay", "overlay onClick")
-        windowManager.removeView(dialog)
+        exitProcess(0)
     }
 }
