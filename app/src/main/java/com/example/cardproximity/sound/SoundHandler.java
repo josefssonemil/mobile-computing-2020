@@ -75,6 +75,31 @@ public class SoundHandler {
         }
     }
 
+    public void stop(){
+        if (current == Type.SENDER){
+            soundGenerator.stop();
+            System.out.println("Sender stops play");
+        }
+
+        else if (current == Type.RECEIVER){
+
+            soundAnalyzer.stopListening();
+            System.out.println("Receiver stops listen");
+
+        }
+    }
+
+    public boolean checkStatus() {
+        if (soundAnalyzer.getresult() == soundGenerator.getFrequency()){
+            stop();
+            return true;
+
+        }
+        else {
+            return false;
+        }
+    }
+
 
 
 

@@ -152,4 +152,8 @@ public class SoundGenerator {
         m_PlayThread.start();
     }
 
+    public int getFrequency() {
+        return m_ifreq;
+    }
+
 }
