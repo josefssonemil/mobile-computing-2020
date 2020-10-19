@@ -125,6 +125,7 @@ class OverlayService : Service(), View.OnClickListener {
         return false
     }
 
+    /* Calculates coordinates distance in meters and returns true or false depending on a set difference in meters*/
     fun isInProximity(latitude: Double, longitude: Double): Boolean {
 
         // Tempo coordinates: 57.706243 12.024906
