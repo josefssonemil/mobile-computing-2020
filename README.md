@@ -15,7 +15,7 @@ The normal use of the application can be run in both an android emulator and a p
 
 1. Run the code using an emulator
 2. In *Logcat*, copy the the emulators Build ID in the first print marked with *****BUILD ID*****
-3. Go to ```java/com.exmaple.cardproximity/sound/utils/Constants.kt```
+3. Go to ```java/com.exmaple.cardproximity/sound/utils/Constants.java```
 4. Replace the ```SENDER``` string with your copied Build ID
 
 ### Device Setup
